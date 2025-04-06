@@ -3,8 +3,8 @@ import { launch, Browser } from "puppeteer";
 let browser: Browser | undefined;
 
 // for singleton browser instance
-export async function initBrowser() {
-    browser = await launch({ headless: true });
+export async function initBrowser(headless: boolean) {
+    browser = await launch({ headless });
 }
 
 export async function newPage() {

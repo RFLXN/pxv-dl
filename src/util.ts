@@ -22,14 +22,14 @@ export async function artworkDirectory() {
     }
 }
 
-export async function readline(): Promise<string> {
+export async function readline(s = ""): Promise<string> {
     return new Promise((resolve) => {
         const rl = createInterface({
             input: process.stdin,
             output: process.stdout
         });
 
-        rl.question("", (answer) => {
+        rl.question(s, (answer) => {
             rl.close();
             resolve(answer);
         });

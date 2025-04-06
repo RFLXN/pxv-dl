@@ -7,7 +7,7 @@
     "lint": "eslint src/**/*.ts --fix",
     "clean": "rimraf dist",
     "prebuild": "yarn run clean",
-    "build": "swc src -d dist --config-file .swcrc && mv dist/src/* dist && rmdir dist/src",
+    "build": "swc src -d dist --config-file .swcrc && shx mv dist/src/* dist && shx rm -rf dist/src",
     "type": "tsc --noEmit",
     "test": "jest",
     "start": "node dist/index.js",
@@ -29,6 +29,7 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "rimraf": "^6.0.1",
+    "shx": "^0.4.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.2.0"
   },

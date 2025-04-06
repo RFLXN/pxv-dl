@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
-import { newPage } from "@/virtual-browser";
 import { ARTIST_URL } from "@/constant";
 import { sleep } from "@/util";
+import type { Page } from "puppeteer";
 
 function getArtistUrl(artistId: number) {
     return ARTIST_URL.replace("{}", artistId.toString());
@@ -15,8 +15,7 @@ function parseArtworkIds(html: string) {
     ).map(path => path.replace("/artworks/", ""));
 }
 
-export async function getArtistArtworks(artistId: number) {
-    const page = await newPage();
+export async function getArtistArtworks(page: Page, artistId: number) {
     const artistUrl = getArtistUrl(artistId);
 
     await page.goto(artistUrl);
@@ -28,10 +27,12 @@ export async function getArtistArtworks(artistId: number) {
     let beforeIds: string[] = [];
 
     while (true) {
-        await sleep(1000 * 3);
+        console.log(`Fetching artist page ${p}...`);
         await page.goto(artistUrl + `?p=${p}`, { waitUntil: "networkidle0" });
         const html = await page.content();
         const ids = parseArtworkIds(html);
+
+        if (ids.length == 0) break;
 
         let isDup = false;
         for (const id of ids) {
@@ -46,8 +47,6 @@ export async function getArtistArtworks(artistId: number) {
         artworks = [...artworks, ...ids];
         p++;
     }
-
-    await page.close();
 
     return artworks;
 }
